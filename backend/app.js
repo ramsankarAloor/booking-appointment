@@ -12,9 +12,9 @@ app.use(cors());
 
 app.use(express.json());
 
-app.get("/", async (req, res) => {
+app.get("/bookings", async (req, res) => {
   const bookings = await UserBooking.findAll();
-  res.send(bookings);
+  res.json(bookings);
 });
 
 app.post("/new-booking", async (req, res) => {
@@ -46,6 +46,10 @@ app.post("/new-booking", async (req, res) => {
     });
   }
 });
+
+
+
+
 
 app.use("/", (req, res, next) => {
   res.status(404).send("<h1>Page not found</h1>");

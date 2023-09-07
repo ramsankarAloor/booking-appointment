@@ -7,14 +7,15 @@ form.addEventListener('submit', postNewBooking)
 window.onload = loadData
 
 async function loadData(){
-  let res = await axios.get('http://localhost:5000/');
+  const res = await axios.get('http://localhost:5000/bookings');
   res.data.forEach(element => {
-    const name = element.name
-    const email = element.email
-    const phone = element.phone
+    const id = element.id;
+    const name = element.name;
+    const email = element.email;
+    const phone = element.phone;
 
-    displayRecord(name, email, phone);
-  });
+    displayRecord(id, name, email, phone);
+  })
 }
 
 async function postNewBooking(e){
@@ -29,7 +30,7 @@ async function postNewBooking(e){
     'phone' : phone
   }
 
-  displayRecord(name, email, phone);
+  displayRecord(id, name, email, phone);
 
   await axios.post('http://localhost:5000/new-booking', obj);
 
@@ -42,7 +43,7 @@ async function postNewBooking(e){
 
 }
 
-function displayRecord(name, email, phone){
+function displayRecord(id, name, email, phone){
   let toBePrinted = name+' - '+email+' - '+phone
 
   let textInside = document.createTextNode(toBePrinted)
@@ -55,4 +56,13 @@ function displayRecord(name, email, phone){
   
   let ul = document.getElementById('items')
   ul.appendChild(li)
+
+  deleteBtn.addEventListener('click', deleteBooking);
+
+  async function deleteBooking(event){
+    const liCurrent = event.target.parentElement;
+    const ul = document.getElementById('items');
+    // await axios.delete(`http://localhost:5000/bookings/${id}`);
+    ul.removeChild(liCurrent);
+  }
 }
