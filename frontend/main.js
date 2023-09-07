@@ -9,12 +9,7 @@ window.onload = loadData
 async function loadData(){
   const res = await axios.get('http://localhost:5000/bookings');
   res.data.forEach(element => {
-    const id = element.id;
-    const name = element.name;
-    const email = element.email;
-    const phone = element.phone;
-
-    displayRecord(id, name, email, phone);
+    displayRecord(element);
   })
 }
 
@@ -30,12 +25,8 @@ async function postNewBooking(e){
     'phone' : phone
   }
 
-  displayRecord(id, name, email, phone);
-
-  await axios.post('http://localhost:5000/new-booking', obj);
-
-  // deleteBtn.addEventListener('click', deleteEle)
-  // editBtn.addEventListener('click', editEle)
+  const result = await axios.post('http://localhost:5000/new-booking', obj);
+  displayRecord(result.data.newBooking);
 
   document.getElementById('name').value = ''
   document.getElementById('email').value = ''
@@ -43,8 +34,8 @@ async function postNewBooking(e){
 
 }
 
-function displayRecord(id, name, email, phone){
-  let toBePrinted = name+' - '+email+' - '+phone
+function displayRecord(object){
+  let toBePrinted = object.name+' - '+ object.email+' - '+ object.phone
 
   let textInside = document.createTextNode(toBePrinted)
   let deleteBtn = document.createElement('button')
@@ -62,7 +53,7 @@ function displayRecord(id, name, email, phone){
   async function deleteBooking(event){
     const liCurrent = event.target.parentElement;
     const ul = document.getElementById('items');
-    // await axios.delete(`http://localhost:5000/bookings/${id}`);
+    await axios.delete(`http://localhost:5000/bookings/${object.id}`);
     ul.removeChild(liCurrent);
   }
 }

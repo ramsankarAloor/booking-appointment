@@ -3,8 +3,7 @@ const express = require("express");
 const sequelize = require("./util/database");
 const cors = require('cors');
 
-const userBooking = require("./models/user-booking");
-const UserBooking = require("./models/user-booking");
+const UserBookings = require("./models/user-bookings");
 
 const app = express();
 
@@ -13,7 +12,7 @@ app.use(cors());
 app.use(express.json());
 
 app.get("/bookings", async (req, res) => {
-  const bookings = await UserBooking.findAll();
+  const bookings = await UserBookings.findAll();
   res.json(bookings);
 });
 
@@ -32,7 +31,7 @@ app.post("/new-booking", async (req, res) => {
     const email = req.body.email;
     const phone = req.body.phone;
 
-    const data = await UserBooking.create({
+    const data = await UserBookings.create({
       name: name,
       email: email,
       phone: phone,
@@ -47,7 +46,12 @@ app.post("/new-booking", async (req, res) => {
   }
 });
 
-
+app.delete("/bookings/:id", async (req, res)=>{
+  const bookingId = req.params.id;
+  const booking = await UserBookings.findByPk(bookingId);
+  const result = await booking.destroy();
+  res.json(result);
+})
 
 
 
