@@ -27,7 +27,6 @@ async function postNewBooking(e){
 
   const result = await axios.post('http://localhost:5000/new-booking', obj);
   displayRecord(result.data.newBooking);
-
   document.getElementById('name').value = ''
   document.getElementById('email').value = ''
   document.getElementById('phone').value = ''
@@ -51,9 +50,7 @@ function displayRecord(object){
   deleteBtn.addEventListener('click', deleteBooking);
 
   async function deleteBooking(event){
-    const liCurrent = event.target.parentElement;
-    const ul = document.getElementById('items');
     await axios.delete(`http://localhost:5000/bookings/${object.id}`);
-    ul.removeChild(liCurrent);
+    window.location.reload();
   }
 }
